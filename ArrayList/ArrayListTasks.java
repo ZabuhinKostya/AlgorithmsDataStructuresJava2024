@@ -69,10 +69,9 @@ public class ArrayListTasks {
         boolean isEmpty = colors.isEmpty();
         System.out.println("Is the list empty? " + isEmpty);
 
-        // 14. Увеличение размера списка
-        colors.add("Pink");
-        colors.add("Brown");
-        System.out.println("After increasing size: " + colors);
+        // 14. Увеличение вместимости списка
+        ((ArrayList<String>) colors).ensureCapacity(20);
+        System.out.println("Capacity increased to at least 20.");
 
         // 15. Подгонка емкости под текущий размер
         ((ArrayList<String>) colors).trimToSize();
