@@ -1,5 +1,5 @@
 package ConsoleGame.Game;
 
-interface PlayerInput {
+public interface PlayerInput {
     int getPlayerGuess();
 }
