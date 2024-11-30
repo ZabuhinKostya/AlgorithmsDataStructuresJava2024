@@ -16,10 +16,10 @@ class ConsolePlayerInput implements PlayerInput {
     public int getPlayerGuess() {
         while (true) {
             try {
-                System.out.print("Введіть ваше число: ");
+                System.out.print("Введiть ваше число: ");
                 return scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Невірний ввід! Будь ласка, введіть ціле число.");
+                System.out.println("Невiрний ввiд! Будь ласка, введiть цiле число.");
                 scanner.next(); // Очищення некоректного вводу
             }
         }
@@ -34,10 +34,10 @@ class HintProvider {
     public String getHint(int lastGuess, int secretNumber) {
         if (lastGuess < secretNumber) {
             lowerBound = Math.max(lowerBound, lastGuess + 1);
-            return "Загадане число більше. Спробуйте діапазон: " + lowerBound + " - " + upperBound;
+            return "Загадане число бiльше. Спробуйте дiапазон: " + lowerBound + " - " + upperBound;
         } else {
             upperBound = Math.min(upperBound, lastGuess - 1);
-            return "Загадане число менше. Спробуйте діапазон: " + lowerBound + " - " + upperBound;
+            return "Загадане число менше. Спробуйте дiапазон: " + lowerBound + " - " + upperBound;
         }
     }
 }
@@ -74,7 +74,7 @@ class GameEngine {
             attempts++;
 
             if (guess == secretNumber) {
-                System.out.println("Вітаємо! Ви відгадали число за " + attempts + " спроб.");
+                System.out.println("Вiтаємо! Ви вiдгадали число за " + attempts + " спроб.");
                 guessed = true;
             } else {
                 System.out.println(hintProvider.getHint(guess, secretNumber));
@@ -86,25 +86,27 @@ class GameEngine {
             }
         }
     }
-     // Метод для запроса пользователя на продолжение игры
-     public boolean askToPlayAgain() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Хочете зіграти ще раз? (так/ні): ");
-            String answer = scanner.nextLine().toLowerCase();
-            return answer.equals("так") || answer.equals("yes");
-        }
-    }
-}
+
 
 
 // Головний клас
 public class GetNumberGame {
     public static void main(String[] args) {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Виберіть режим гри: ");
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nВиберiть режим гри:");
             System.out.println("1. Ви вгадуєте число, загадане комп'ютером.");
             System.out.println("2. Комп'ютер вгадує ваше число.");
+            System.out.println("3. Вихiд.");
+            System.out.print("Ваш вибiр: ");
+
             int choice = scanner.nextInt();
+
+            if (choice == 3) {
+                System.out.println("Дякуємо за гру! До побачення!");
+                break;
+            }
 
             PlayerInput playerInput;
             HintProvider hintProvider = new HintProvider();
@@ -118,22 +120,25 @@ public class GetNumberGame {
             } else if (choice == 2) {
                 // Комп'ютер вгадує число, яке загадала людина
                 playerInput = new ComputerPlayer();
-                System.out.print("Загадайте число для комп'ютера (від 1 до 100): ");
+                System.out.print("Загадайте число для комп'ютера (вiд 1 до 100): ");
                 int secretNumber = scanner.nextInt();
 
                 // Перевірка введення числа в правильному діапазоні
                 while (secretNumber < 1 || secretNumber > 100) {
-                    System.out.print("Невірне число! Введіть значення від 1 до 100: ");
+                    System.out.print("Невiрне число! Введiть значення вiд 1 до 100: ");
                     secretNumber = scanner.nextInt();
                 }
 
                 gameEngine = new GameEngine(playerInput, hintProvider, secretNumber);
             } else {
-                System.out.println("Невірний вибір. Спробуйте знову.");
-                return;
+                System.out.println("Невiрний вибiр. Спробуйте знову.");
+                continue;
             }
 
             gameEngine.startGame();
+        }
+
+        scanner.close();
         }
     }
 }
